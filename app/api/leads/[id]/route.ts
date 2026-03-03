@@ -1,11 +1,24 @@
 import { NextResponse } from "next/server"
-import { Prisma } from "@prisma/client"
 import { prisma } from "@/lib/prisma"
 
 const validStatuses = new Set(["new", "in_progress", "done"])
 
 type StatusPayload = {
   status?: string
+}
+
+type PrismaKnownRequestErrorLike = {
+  name?: string
+  code?: string
+}
+
+function isPrismaKnownRequestError(error: unknown): error is PrismaKnownRequestErrorLike {
+  return (
+    typeof error === "object" &&
+    error !== null &&
+    "name" in error &&
+    (error as { name?: string }).name === "PrismaClientKnownRequestError"
+  )
 }
 
 export async function PATCH(
@@ -43,7 +56,7 @@ export async function PATCH(
 
     return NextResponse.json({ success: true }, { status: 200 })
   } catch (error) {
-    if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === "P2025") {
+    if (isPrismaKnownRequestError(error) && error.code === "P2025") {
       return NextResponse.json({ error: "Lead not found" }, { status: 404 })
     }
 

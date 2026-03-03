@@ -1,5 +1,4 @@
 import { NextResponse } from "next/server"
-import { Prisma } from "@prisma/client"
 import { prisma } from "@/lib/prisma"
 import { sendLeadTelegramNotification } from "@/lib/lead-notifier"
 
@@ -8,6 +7,30 @@ type LeadPayload = {
   phone?: string
   service?: string
   message?: string
+}
+
+type PrismaErrorLike = {
+  name?: string
+  code?: string
+  message?: string
+}
+
+function isPrismaKnownRequestError(error: unknown): error is PrismaErrorLike {
+  return (
+    typeof error === "object" &&
+    error !== null &&
+    "name" in error &&
+    (error as { name?: string }).name === "PrismaClientKnownRequestError"
+  )
+}
+
+function isPrismaValidationError(error: unknown): error is PrismaErrorLike {
+  return (
+    typeof error === "object" &&
+    error !== null &&
+    "name" in error &&
+    (error as { name?: string }).name === "PrismaClientValidationError"
+  )
 }
 
 export async function GET() {
@@ -80,12 +103,12 @@ export async function POST(request: Request) {
 
     return NextResponse.json({ success: true }, { status: 201 })
   } catch (error) {
-    if (error instanceof Prisma.PrismaClientKnownRequestError) {
+    if (isPrismaKnownRequestError(error)) {
       console.error("lead-create-known-prisma-error", error.code, error.message)
       return NextResponse.json({ error: "Database request error" }, { status: 500 })
     }
 
-    if (error instanceof Prisma.PrismaClientValidationError) {
+    if (isPrismaValidationError(error)) {
       console.error("lead-create-validation-prisma-error", error.message)
       return NextResponse.json({ error: "Database validation error" }, { status: 400 })
     }
