@@ -1,0 +1,39 @@
+<svg width="2400" height="1400" viewBox="0 0 2400 1400" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="280" y1="140" x2="2140" y2="1280" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#191919" />
+      <stop offset="0.55" stop-color="#0D0D0D" />
+      <stop offset="1" stop-color="#050505" />
+    </linearGradient>
+    <radialGradient id="highlight" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(1215 402) rotate(90) scale(370 1260)">
+      <stop stop-color="#F5F5F5" stop-opacity="0.36" />
+      <stop offset="1" stop-color="#F5F5F5" stop-opacity="0" />
+    </radialGradient>
+    <radialGradient id="amber" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(1640 1100) rotate(180) scale(840 370)">
+      <stop stop-color="#F59E0B" stop-opacity="0.48" />
+      <stop offset="1" stop-color="#F59E0B" stop-opacity="0" />
+    </radialGradient>
+    <filter id="blur" x="-300" y="-300" width="3000" height="2000" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+      <feGaussianBlur stdDeviation="40" />
+    </filter>
+  </defs>
+
+  <rect width="2400" height="1400" fill="url(#bg)" />
+  <rect width="2400" height="1400" fill="url(#highlight)" />
+  <rect width="2400" height="1400" fill="url(#amber)" />
+
+  <g opacity="0.58">
+    <path d="M323 936C498 792 706 682 981 650C1298 613 1495 651 1718 747C1834 796 1984 874 2085 971" stroke="#E7E7E7" stroke-opacity="0.58" stroke-width="7"/>
+    <path d="M292 996C511 778 786 660 1152 660C1416 660 1704 754 2060 1013" stroke="#FAFAFA" stroke-opacity="0.22" stroke-width="4"/>
+    <path d="M470 951C629 788 851 706 1148 706C1415 706 1638 783 1862 967" stroke="#F59E0B" stroke-opacity="0.32" stroke-width="5"/>
+  </g>
+
+  <g filter="url(#blur)" opacity="0.36">
+    <ellipse cx="638" cy="992" rx="158" ry="44" fill="#F8F8F8"/>
+    <ellipse cx="1764" cy="1002" rx="178" ry="48" fill="#F8F8F8"/>
+    <ellipse cx="1214" cy="862" rx="566" ry="126" fill="#FFFFFF"/>
+  </g>
+
+  <rect x="0" y="0" width="2400" height="1400" fill="url(#bg)" fill-opacity="0.24" />
+</svg>
+

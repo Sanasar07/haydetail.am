@@ -19,6 +19,7 @@ import {
 } from "lucide-react"
 import { motion, useScroll, useSpring, useTransform } from "framer-motion"
 
+import { PremiumHero } from "@/components/premium-hero"
 import { TiltCard } from "@/components/tilt-card"
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
@@ -266,12 +267,6 @@ function PortfolioCard({
 }
 
 export default function Home() {
-  const heroRef = useRef<HTMLElement | null>(null)
-  const { scrollYProgress: heroProgress } = useScroll({ target: heroRef, offset: ["start start", "end start"] })
-  const heroTextY = useTransform(heroProgress, [0, 1], [0, 90])
-  const heroBackgroundScale = useTransform(heroProgress, [0, 1], [1, 1.16])
-  const heroBackgroundY = useTransform(heroProgress, [0, 1], [0, -40])
-
   const { scrollY } = useScroll()
   const lightOneY = useTransform(scrollY, [0, 1600], [0, 220])
   const lightTwoY = useTransform(scrollY, [0, 1600], [0, -180])
@@ -332,32 +327,7 @@ export default function Home() {
     <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.7, ease: "easeOut" }} className="relative overflow-x-clip premium-bg">
       <motion.div aria-hidden style={{ y: lightOne }} className="pointer-events-none absolute -left-24 top-28 z-0 h-72 w-72 rounded-full bg-amber-500/20 blur-3xl" />
       <motion.div aria-hidden style={{ y: lightTwo }} className="pointer-events-none absolute -right-28 top-[38rem] z-0 h-80 w-80 rounded-full bg-orange-400/15 blur-3xl" />
-
-      <section ref={heroRef} className="relative min-h-[88vh] overflow-hidden pt-16">
-        <motion.div style={{ scale: heroBackgroundScale, y: heroBackgroundY }} className="absolute inset-0 z-0">
-          <Image src="https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?auto=format&fit=crop&w=2200&q=80" alt="Premium detailing studio" fill priority className="object-cover" />
-          <div className="absolute inset-0 bg-gradient-to-b from-black/75 via-black/65 to-[#0a0a0a]" />
-        </motion.div>
-        <div className="site-container relative z-10 flex min-h-[80vh] items-center section-space">
-          <motion.div style={{ y: heroTextY }} variants={containerVariants} initial="hidden" animate="show" className="max-w-3xl">
-            <motion.p variants={cardVariants} className="section-kicker">PREMIUM DETAILING STUDIO</motion.p>
-            <motion.h1 variants={cardVariants} className="mt-5 text-4xl font-bold leading-tight tracking-wide text-white md:text-6xl">
-              Премиальный уход для <span className="bg-gradient-to-r from-amber-300 to-orange-400 bg-clip-text text-transparent">вашего авто</span> без компромиссов
-            </motion.h1>
-            <motion.p variants={cardVariants} className="mt-6 max-w-2xl text-lg leading-relaxed tracking-wide text-zinc-300">
-              Детейлинг, полировка, керамика и защита пленкой в минималистичном luxury-стиле.
-            </motion.p>
-            <motion.div variants={cardVariants} className="mt-10 flex flex-wrap gap-4">
-              <Button asChild size="lg" className="h-12 rounded-xl bg-amber-400 px-7 text-base font-semibold text-black shadow-lg shadow-amber-500/35 hover:bg-amber-300">
-                <Link href="#contacts">Записаться</Link>
-              </Button>
-              <Button asChild variant="outline" size="lg" className="h-12 rounded-xl border-white/30 bg-black/30 px-7 text-base text-white backdrop-blur-sm hover:border-white/50 hover:bg-white/10">
-                <Link href="#portfolio">Смотреть работы</Link>
-              </Button>
-            </motion.div>
-          </motion.div>
-        </div>
-      </section>
+      <PremiumHero className="pt-16" />
 
       <motion.section id="services" className="section-space scroll-mt-24" initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, amount: 0.2 }} transition={{ duration: 0.7, ease: "easeOut" }}>
         <div className="site-container">
