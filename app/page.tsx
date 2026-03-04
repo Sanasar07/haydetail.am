@@ -27,46 +27,53 @@ import { Dialog, DialogContent, DialogDescription, DialogTitle } from "@/compone
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 
-type ServiceItem = { title: string; description: string; image: string }
+type ServiceItem = { title: string; description: string; details: string[]; image: string; icon: LucideIcon }
 type WhyItem = { icon: LucideIcon; title: string; description: string; image: string }
 type PortfolioItem = { title: string; description: string; beforeImage: string; afterImage: string }
 
 const services: ServiceItem[] = [
   {
-    title: "Детейлинг мойка",
-    description: "Безопасная многоэтапная мойка кузова и дисков.",
-    image:
-      "https://images.unsplash.com/photo-1607861716497-e65ab29fc7ac?auto=format&fit=crop&w=1200&q=80",
+    title: "Полировка и защита кузова",
+    description: "Абразивная и восстановительная полировка, керамика и нанопокрытия для долговечной защиты.",
+    details: [
+      "Абразивная и восстановительная полировка",
+      "Керамическое покрытие для защиты от грязи, воды и ультрафиолета",
+      "Жидкое стекло и нанопокрытия",
+    ],
+    image: "https://static.tildacdn.com/tild6664-3764-4565-a163-623231316435/car-wash-detailing-s.jpg",
+    icon: Sparkles,
   },
   {
-    title: "Полировка кузова",
-    description: "Убираем микрориски и возвращаем глубокий блеск.",
-    image:
-      "https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&w=1200&q=80",
+    title: "Чистка и восстановление интерьера",
+    description: "Глубокая химчистка и деликатное восстановление материалов салона.",
+    details: [
+      "Глубокая химчистка салона",
+      "Восстановление и защита кожаных поверхностей",
+      "Антибактериальная обработка",
+    ],
+    image: "https://static.tildacdn.com/tild3765-3265-4538-a239-343764663530/midsection-person-wo.jpg",
+    icon: Gem,
   },
   {
-    title: "Керамическое покрытие",
-    description: "Долговременная защита ЛКП и гидрофобный эффект.",
-    image:
-      "https://images.unsplash.com/photo-1619642751034-765dfdf7c58e?auto=format&fit=crop&w=1200&q=80",
+    title: "Оклейка защитными пленками",
+    description: "Бронирование, тонировка и полная смена цвета авто с премиальной подгонкой.",
+    details: [
+      "Бронирование кузова антигравийной пленкой",
+      "Тонировка стекол с соблюдением ГОСТ",
+      "Полная смена цвета авто виниловыми пленками",
+    ],
+    image: "https://static.tildacdn.com/tild6230-3861-4738-b564-363262653266/__2025-03-15__172225.png",
+    icon: ShieldCheck,
   },
   {
-    title: "Оклейка защитной пленкой",
-    description: "Защита от сколов, реагентов и мелких повреждений.",
-    image:
-      "https://images.unsplash.com/photo-1493238792000-8113da705763?auto=format&fit=crop&w=1200&q=80",
-  },
-  {
-    title: "Химчистка салона",
-    description: "Глубокая очистка всех материалов салона.",
-    image:
-      "https://images.unsplash.com/photo-1617654112328-28f6f5d6f3b9?auto=format&fit=crop&w=1200&q=80",
-  },
-  {
-    title: "Тонировка стекол",
-    description: "Комфорт, приватность и защита салона от солнца.",
-    image:
-      "https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?auto=format&fit=crop&w=1200&q=80",
+    title: "Уход за оптикой и стеклами",
+    description: "Восстановление прозрачности и гидрофобная защита для безопасной езды.",
+    details: [
+      "Полировка фар для восстановления прозрачности",
+      "Антидождь и антигрязь для стекол",
+    ],
+    image: "https://static.tildacdn.com/tild3937-6631-4332-b835-383936373961/detailing-master-rub.jpg",
+    icon: Wrench,
   },
 ]
 
@@ -160,29 +167,50 @@ const cardVariants = {
   show: { opacity: 1, y: 0, transition: { duration: 0.7, ease: "easeOut" as const } },
 }
 
-function ServiceCard({ item }: { item: ServiceItem }) {
+function ServiceCard({
+  item,
+  index,
+  onOpen,
+}: {
+  item: ServiceItem
+  index: number
+  onOpen: (index: number) => void
+}) {
+  const Icon = item.icon
+
   return (
-    <Card className="group relative aspect-square overflow-hidden rounded-2xl border-white/10 bg-black/35 p-0 shadow-lg shadow-black/40 transition-all duration-500 hover:-translate-y-2 hover:shadow-xl hover:shadow-amber-500/20">
-      <Image
-        src={item.image}
-        alt={item.title}
-        fill
-        sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw"
-        className="object-cover transition-transform duration-500 group-hover:scale-110"
-      />
-      <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/40 to-transparent transition-all duration-500 group-hover:from-black/95 group-hover:via-black/55" />
-      <div className="absolute inset-0 bg-white/0 backdrop-blur-0 transition-all duration-500 group-hover:bg-white/5 group-hover:backdrop-blur-sm" />
-      <div className="relative z-10 mt-auto flex h-full flex-col justify-end p-6">
-        <h3 className="text-xl font-semibold tracking-wide text-white">{item.title}</h3>
-        <p className="mt-2 text-sm tracking-wide text-zinc-300">{item.description}</p>
-        <Button
-          variant="outline"
-          className="mt-4 h-10 w-fit rounded-xl border-white/25 bg-black/35 px-4 text-white hover:border-amber-300/70 hover:bg-amber-400/15 hover:text-amber-100"
-        >
-          Подробнее
-        </Button>
-      </div>
-    </Card>
+    <motion.button
+      type="button"
+      onClick={() => onOpen(index)}
+      whileHover={{ y: -8, scale: 1.015 }}
+      transition={{ duration: 0.3, ease: "easeOut" }}
+      className="h-full w-full text-left"
+    >
+      <TiltCard className="h-full" intensity={7}>
+        <Card className="group relative aspect-square overflow-hidden rounded-2xl border-white/10 bg-black/35 p-0 shadow-lg shadow-black/40 transition-all duration-500 hover:shadow-xl hover:shadow-amber-500/20">
+          <Image
+            src={item.image}
+            alt={item.title}
+            fill
+            sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw"
+            className="object-cover transition-transform duration-500 group-hover:scale-110"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-transparent transition-all duration-500 group-hover:from-black/95 group-hover:via-black/60" />
+          <div className="absolute inset-0 bg-white/0 backdrop-blur-0 transition-all duration-500 group-hover:bg-white/5 group-hover:backdrop-blur-sm" />
+          <div className="relative z-10 mt-auto flex h-full flex-col justify-end p-6">
+            <div className="mb-4 inline-flex size-10 items-center justify-center rounded-xl border border-white/20 bg-black/45 text-amber-300 backdrop-blur-sm">
+              <Icon className="size-5" />
+            </div>
+            <h3 className="text-xl font-semibold tracking-wide text-white">{item.title}</h3>
+            <p className="mt-2 text-sm leading-relaxed tracking-wide text-zinc-200">{item.description}</p>
+            <span className="mt-4 inline-flex items-center gap-2 text-sm font-medium text-amber-300">
+              Подробнее
+              <ArrowRight className="size-4" />
+            </span>
+          </div>
+        </Card>
+      </TiltCard>
+    </motion.button>
   )
 }
 
@@ -278,6 +306,11 @@ export default function Home() {
     () => (activePortfolioIndex === null ? null : portfolioItems[activePortfolioIndex]),
     [activePortfolioIndex],
   )
+  const [activeServiceIndex, setActiveServiceIndex] = useState<number | null>(null)
+  const activeServiceItem = useMemo(
+    () => (activeServiceIndex === null ? null : services[activeServiceIndex]),
+    [activeServiceIndex],
+  )
 
   const [name, setName] = useState("")
   const [phone, setPhone] = useState("")
@@ -332,11 +365,11 @@ export default function Home() {
       <motion.section id="services" className="section-space scroll-mt-24" initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, amount: 0.2 }} transition={{ duration: 0.7, ease: "easeOut" }}>
         <div className="site-container">
           <p className="section-kicker">SERVICES</p>
-          <h2 className="section-title">Детейлинг услуги</h2>
-          <p className="section-lead">Комплексные решения для экстерьера и интерьера с долговечным результатом.</p>
+          <h2 className="section-title">Услуги детейлинга</h2>
+          <p className="section-lead">Полировка, интерьер, защитные пленки и уход за оптикой. Нажмите на карточку, чтобы открыть полный состав работ.</p>
           <motion.div variants={containerVariants} initial="hidden" whileInView="show" viewport={{ once: true, amount: 0.15 }} className="mt-12 grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-3">
-            {services.map((item) => (
-              <motion.div key={item.title} variants={cardVariants}><ServiceCard item={item} /></motion.div>
+            {services.map((item, index) => (
+              <motion.div key={item.title} variants={cardVariants}><ServiceCard item={item} index={index} onOpen={setActiveServiceIndex} /></motion.div>
             ))}
           </motion.div>
         </div>
@@ -427,6 +460,28 @@ export default function Home() {
           </motion.div>
         </div>
       </motion.section>
+
+      <Dialog open={activeServiceIndex !== null} onOpenChange={(open) => !open && setActiveServiceIndex(null)}>
+        <DialogContent className="max-w-2xl border-white/10 bg-[#090909]/95 p-4 backdrop-blur-xl sm:p-6">
+          <DialogTitle className="text-xl font-semibold tracking-wide text-white">{activeServiceItem?.title}</DialogTitle>
+          <DialogDescription className="text-zinc-300">{activeServiceItem?.description}</DialogDescription>
+          {activeServiceItem ? (
+            <div className="space-y-5">
+              <div className="relative aspect-[16/9] overflow-hidden rounded-2xl border border-white/10 bg-black/30">
+                <Image src={activeServiceItem.image} alt={activeServiceItem.title} fill sizes="95vw" className="object-cover" />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
+              </div>
+              <ul className="space-y-2">
+                {activeServiceItem.details.map((detail) => (
+                  <li key={detail} className="rounded-lg border border-white/10 bg-white/5 px-4 py-3 text-sm text-zinc-100">
+                    {detail}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ) : null}
+        </DialogContent>
+      </Dialog>
 
       <Dialog open={activePortfolioIndex !== null} onOpenChange={(open) => !open && setActivePortfolioIndex(null)}>
         <DialogContent className="max-w-5xl border-white/10 bg-[#090909]/95 p-4 backdrop-blur-xl sm:p-6">
