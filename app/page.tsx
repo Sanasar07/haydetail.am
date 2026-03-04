@@ -28,8 +28,35 @@ import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 
 type ServiceItem = { title: string; description: string; details: string[]; image: string; icon: LucideIcon }
-type WhyItem = { icon: LucideIcon; title: string; description: string; image: string }
+type WhyItem = { title: string; description: string; image: string }
 type PortfolioItem = { title: string; description: string; beforeImage: string; afterImage: string }
+
+const WHY_CHOOSE_COPY = {
+  heading: "Почему выбирают нас?",
+  lead: "Доверяя нам свой автомобиль — он будет выглядеть лучше, чем новый!",
+  items: [
+    {
+      title: "Премиальные материалы\nи технологии",
+      description:
+        "Мы используем только проверенные премиальные составы и современное оборудование, чтобы обеспечить вашему автомобилю безупречный внешний вид и защиту на долгие годы",
+    },
+    {
+      title: "Опытные мастера с\nмноголетним стажем",
+      description:
+        "Наши специалисты – профессионалы своего дела с богатым опытом работы в детейлинге. Они знают, как добиться идеального результата и подчеркнуть эксклюзивность вашего авто",
+    },
+    {
+      title: "Гарантия качества\nна все виды работ",
+      description:
+        "Мы уверены в качестве своих услуг, поэтому предоставляем гарантию на все выполненные работы. Ваш автомобиль – в надежных руках",
+    },
+    {
+      title: "Индивидуальный подход\nк каждому клиенту",
+      description:
+        "Мы подбираем решения с учетом ваших пожеланий и особенностей автомобиля, чтобы вы получили именно тот результат, который ожидаете",
+    },
+  ] satisfies Array<Omit<WhyItem, "image">>,
+}
 
 const services: ServiceItem[] = [
   {
@@ -77,50 +104,10 @@ const services: ServiceItem[] = [
   },
 ]
 
-const whyItems: WhyItem[] = [
-  {
-    icon: Gem,
-    title: "Премиум материалы",
-    description: "Только проверенные бренды и сертифицированная химия.",
-    image:
-      "https://images.unsplash.com/photo-1605433247501-698725862cea?auto=format&fit=crop&w=1200&q=80",
-  },
-  {
-    icon: Wrench,
-    title: "Опытные мастера",
-    description: "Точность исполнения и персональный контроль качества.",
-    image:
-      "https://images.unsplash.com/photo-1487754180451-c456f719a1fc?auto=format&fit=crop&w=1200&q=80",
-  },
-  {
-    icon: ShieldCheck,
-    title: "Гарантия качества",
-    description: "Фиксируем стандарты и отвечаем за конечный результат.",
-    image:
-      "https://images.unsplash.com/photo-1489824904134-891ab64532f1?auto=format&fit=crop&w=1200&q=80",
-  },
-  {
-    icon: Sparkles,
-    title: "Современное оборудование",
-    description: "Профессиональный свет и оборудование для точной работы.",
-    image:
-      "https://images.unsplash.com/photo-1511919884226-fd3cad34687c?auto=format&fit=crop&w=1200&q=80",
-  },
-  {
-    icon: ShieldCheck,
-    title: "Работаем с любыми авто",
-    description: "От премиальных седанов до семейных и спортивных авто.",
-    image:
-      "https://images.unsplash.com/photo-1494905998402-395d579af36f?auto=format&fit=crop&w=1200&q=80",
-  },
-  {
-    icon: Sparkles,
-    title: "Индивидуальный подход",
-    description: "Пакет услуг под ваш стиль эксплуатации автомобиля.",
-    image:
-      "https://images.unsplash.com/photo-1583121274602-3e2820c69888?auto=format&fit=crop&w=1200&q=80",
-  },
-]
+const whyItems: WhyItem[] = WHY_CHOOSE_COPY.items.map((item, index) => ({
+  ...item,
+  image: `/placeholders/why/why-${index + 1}.svg`,
+}))
 
 const portfolioItems: PortfolioItem[] = [
   {
@@ -217,30 +204,28 @@ function ServiceCard({
 function WhyCard({ item }: { item: WhyItem }) {
   const ref = useRef<HTMLDivElement | null>(null)
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start end", "end start"] })
-  const imageY = useTransform(scrollYProgress, [0, 1], ["-8%", "8%"])
-  const Icon = item.icon
+  const imageY = useTransform(scrollYProgress, [0, 1], ["-6%", "6%"])
 
   return (
-    <motion.div ref={ref} variants={cardVariants}>
-      <TiltCard className="h-full">
-        <Card className="group relative aspect-square overflow-hidden rounded-2xl border-white/10 bg-black/35 p-0 transition-all duration-500 hover:shadow-[0_0_34px_rgba(245,158,11,0.26)]">
-          <motion.div style={{ y: imageY }} className="absolute inset-0 tilt-layer-back">
+    <motion.div ref={ref} variants={cardVariants} whileHover={{ y: -8, scale: 1.015 }} transition={{ duration: 0.28, ease: "easeOut" }}>
+      <TiltCard className="h-full" intensity={8}>
+        <Card className="group relative aspect-square overflow-hidden rounded-2xl border border-white/10 bg-black/35 p-0 shadow-lg shadow-black/35 transition-all duration-500 hover:border-amber-300/45 hover:shadow-[0_0_34px_rgba(245,158,11,0.28)]">
+          <motion.div style={{ y: imageY }} className="absolute inset-0">
             <Image
               src={item.image}
               alt={item.title}
               fill
-              sizes="(max-width: 768px) 50vw, (max-width: 1280px) 33vw, 25vw"
-              className="object-cover transition-transform duration-500 group-hover:scale-110"
+              sizes="(max-width: 640px) 100vw, (max-width: 1280px) 50vw, 25vw"
+              className="object-cover transition-all duration-700 group-hover:scale-110 group-hover:blur-[1.5px]"
             />
           </motion.div>
-          <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/45 to-transparent" />
-          <div className="absolute inset-0 rounded-2xl border border-amber-300/0 transition-colors duration-500 group-hover:border-amber-300/45" />
+
+          <div className="absolute inset-0 bg-gradient-to-t from-black/92 via-black/52 to-black/20 transition-opacity duration-500 group-hover:opacity-90" />
+          <div className="absolute inset-0 bg-black/25 opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
+
           <div className="relative z-10 mt-auto flex h-full flex-col justify-end p-6">
-            <div className="tilt-layer-mid mb-4 inline-flex size-10 items-center justify-center rounded-xl border border-white/15 bg-white/10 text-amber-300 backdrop-blur-sm">
-              <Icon className="size-5" />
-            </div>
-            <h3 className="tilt-layer-front text-lg font-semibold tracking-wide text-white">{item.title}</h3>
-            <p className="tilt-layer-front mt-2 text-sm tracking-wide text-zinc-300">{item.description}</p>
+            <h3 className="text-lg font-bold leading-tight tracking-wide whitespace-pre-line text-white">{item.title}</h3>
+            <p className="mt-2 line-clamp-4 text-sm leading-relaxed tracking-wide text-zinc-200">{item.description}</p>
           </div>
         </Card>
       </TiltCard>
@@ -378,9 +363,9 @@ export default function Home() {
       <motion.section id="why-us" className="section-space scroll-mt-24" initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, amount: 0.2 }} transition={{ duration: 0.7, ease: "easeOut" }}>
         <div className="site-container">
           <p className="section-kicker">WHY CHOOSE US</p>
-          <h2 className="section-title">Почему выбирают нас</h2>
-          <p className="section-lead">Технологичный подход, аккуратные процессы и контроль качества на каждом этапе.</p>
-          <motion.div variants={containerVariants} initial="hidden" whileInView="show" viewport={{ once: true, amount: 0.2 }} className="mt-12 grid grid-cols-2 gap-6 lg:grid-cols-3">
+          <h2 className="section-title">{WHY_CHOOSE_COPY.heading}</h2>
+          <p className="section-lead">{WHY_CHOOSE_COPY.lead}</p>
+          <motion.div variants={containerVariants} initial="hidden" whileInView="show" viewport={{ once: true, amount: 0.2 }} className="mt-12 grid grid-cols-1 gap-6 sm:grid-cols-2 xl:grid-cols-4">
             {whyItems.map((item) => <WhyCard key={item.title} item={item} />)}
           </motion.div>
         </div>
