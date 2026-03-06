@@ -67,7 +67,7 @@ const services: ServiceItem[] = [
       "Керамическое покрытие для защиты от грязи, воды и ультрафиолета",
       "Жидкое стекло и нанопокрытия",
     ],
-    image: "https://static.tildacdn.com/tild6664-3764-4565-a163-623231316435/car-wash-detailing-s.jpg",
+    image: "/uploads/polirovka.jpg",
     icon: Sparkles,
   },
   {
@@ -78,7 +78,7 @@ const services: ServiceItem[] = [
       "Восстановление и защита кожаных поверхностей",
       "Антибактериальная обработка",
     ],
-    image: "https://static.tildacdn.com/tild3765-3265-4538-a239-343764663530/midsection-person-wo.jpg",
+    image: "/uploads/chistka.jpg",
     icon: Gem,
   },
   {
@@ -89,7 +89,7 @@ const services: ServiceItem[] = [
       "Тонировка стекол с соблюдением ГОСТ",
       "Полная смена цвета авто виниловыми пленками",
     ],
-    image: "https://static.tildacdn.com/tild6230-3861-4738-b564-363262653266/__2025-03-15__172225.png",
+    image: "/uploads/plenka.jpg",
     icon: ShieldCheck,
   },
   {
@@ -99,7 +99,7 @@ const services: ServiceItem[] = [
       "Полировка фар для восстановления прозрачности",
       "Антидождь и антигрязь для стекол",
     ],
-    image: "https://static.tildacdn.com/tild3937-6631-4332-b835-383936373961/detailing-master-rub.jpg",
+    image: "/uploads/fari.jpg",
     icon: Wrench,
   },
 ]
