@@ -132,12 +132,11 @@ export function SiteHeader() {
         <div className="flex h-20 items-center justify-between">
           <Link href="/" className="inline-flex items-center gap-3 text-white">
             <Image
-              src="https://optim.tildacdn.com/tild3433-3863-4466-a565-626239336566/-/resize/242x/-/format/webp/%D0%BB%D0%BE%D0%B3%D0%BE_%D1%85%D0%B4.png.webp"
+              src="/uploads/logo.jpg"
               alt="Haydetail"
               width={36}
               height={36}
               className="rounded-md object-cover"
-              unoptimized
             />
             <span className="text-xl font-semibold tracking-[0.04em]">Haydetail</span>
           </Link>

@@ -343,7 +343,7 @@ function LazyMapEmbed() {
   return (
     <div ref={mapContainerRef} className="h-[340px] w-full">
       {shouldLoad ? (
-        <iframe title="Detailing studio location" src="https://www.google.com/maps?q=Yerevan%209%20May%20Street%2026&output=embed" className="h-full w-full border-0" loading="lazy" referrerPolicy="no-referrer-when-downgrade" />
+        <iframe title="Detailing studio location" src="https://yandex.ru/map-widget/v1/?text=Yerevan%2C%209%20May%20Street%2026&z=17" className="h-full w-full border-0" loading="lazy" referrerPolicy="no-referrer-when-downgrade" />
       ) : (
         <div className="flex h-full items-center justify-center bg-white/5 text-sm text-zinc-400">Загрузка карты...</div>
       )}
