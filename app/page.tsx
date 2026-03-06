@@ -2,7 +2,7 @@
 
 import Image from "next/image"
 import Link from "next/link"
-import { useMemo, useRef, useState, type FormEvent } from "react"
+import { memo, useCallback, useEffect, useMemo, useRef, useState, type FormEvent } from "react"
 import {
   ArrowRight,
   ChevronLeft,
@@ -17,7 +17,7 @@ import {
   Wrench,
   type LucideIcon,
 } from "lucide-react"
-import { motion, useScroll, useSpring, useTransform } from "framer-motion"
+import { motion, useReducedMotion, useScroll, useSpring, useTransform } from "framer-motion"
 
 import { PremiumHero } from "@/components/premium-hero"
 import { TiltCard } from "@/components/tilt-card"
@@ -114,33 +114,33 @@ const portfolioItems: PortfolioItem[] = [
     title: "Глубокая полировка",
     description: "Удаление мелких дефектов и восстановление блеска.",
     beforeImage:
-      "https://images.unsplash.com/photo-1549921296-3a6b5f9220bb?auto=format&fit=crop&w=1400&q=80",
+      "/uploads/polirovka.jpg",
     afterImage:
-      "https://images.unsplash.com/photo-1485291571150-772bcfc10da5?auto=format&fit=crop&w=1400&q=80",
+      "/uploads/plenka.jpg",
   },
   {
     title: "Комплексный детейлинг",
     description: "Полный цикл работ по кузову и интерьеру.",
     beforeImage:
-      "https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&w=1400&q=80",
+      "/uploads/chistka.jpg",
     afterImage:
-      "https://images.unsplash.com/photo-1552519507-da3b142c6e3d?auto=format&fit=crop&w=1400&q=80",
+      "/uploads/polirovka.jpg",
   },
   {
     title: "Защитная пленка",
     description: "Бережная оклейка сложных элементов кузова.",
     beforeImage:
-      "https://images.unsplash.com/photo-1493238792000-8113da705763?auto=format&fit=crop&w=1400&q=80",
+      "/uploads/fari.jpg",
     afterImage:
-      "https://images.unsplash.com/photo-1503736334956-4c8f8e92946d?auto=format&fit=crop&w=1400&q=80",
+      "/uploads/plenka.jpg",
   },
   {
     title: "Химчистка салона",
     description: "Глубокая очистка сидений, пластика и потолка.",
     beforeImage:
-      "https://images.unsplash.com/photo-1617654112328-28f6f5d6f3b9?auto=format&fit=crop&w=1400&q=80",
+      "/uploads/chistka.jpg",
     afterImage:
-      "https://images.unsplash.com/photo-1533473359331-0135ef1b58bf?auto=format&fit=crop&w=1400&q=80",
+      "/uploads/fari.jpg",
   },
 ]
 
@@ -154,7 +154,7 @@ const cardVariants = {
   show: { opacity: 1, y: 0, transition: { duration: 0.7, ease: "easeOut" as const } },
 }
 
-function ServiceCard({
+const ServiceCard = memo(function ServiceCard({
   item,
   index,
   onOpen,
@@ -199,18 +199,14 @@ function ServiceCard({
       </TiltCard>
     </motion.button>
   )
-}
+})
 
-function WhyCard({ item }: { item: WhyItem }) {
-  const ref = useRef<HTMLDivElement | null>(null)
-  const { scrollYProgress } = useScroll({ target: ref, offset: ["start end", "end start"] })
-  const imageY = useTransform(scrollYProgress, [0, 1], ["-6%", "6%"])
-
+const WhyCard = memo(function WhyCard({ item }: { item: WhyItem }) {
   return (
-    <motion.div ref={ref} variants={cardVariants} whileHover={{ y: -8, scale: 1.015 }} transition={{ duration: 0.28, ease: "easeOut" }}>
+    <motion.div variants={cardVariants} whileHover={{ y: -8, scale: 1.015 }} transition={{ duration: 0.28, ease: "easeOut" }}>
       <TiltCard className="h-full" intensity={8}>
         <Card className="group relative aspect-square overflow-hidden rounded-2xl border border-white/10 bg-black/35 p-0 shadow-lg shadow-black/35 transition-all duration-500 hover:border-amber-300/45 hover:shadow-[0_0_34px_rgba(245,158,11,0.28)]">
-          <motion.div style={{ y: imageY }} className="absolute inset-0">
+          <div className="absolute inset-0">
             <Image
               src={item.image}
               alt={item.title}
@@ -218,7 +214,7 @@ function WhyCard({ item }: { item: WhyItem }) {
               sizes="(max-width: 640px) 100vw, (max-width: 1280px) 50vw, 25vw"
               className="object-cover transition-all duration-700 group-hover:scale-110 group-hover:blur-[1.5px]"
             />
-          </motion.div>
+          </div>
 
           <div className="absolute inset-0 bg-gradient-to-t from-black/92 via-black/52 to-black/20 transition-opacity duration-500 group-hover:opacity-90" />
           <div className="absolute inset-0 bg-black/25 opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
@@ -231,9 +227,9 @@ function WhyCard({ item }: { item: WhyItem }) {
       </TiltCard>
     </motion.div>
   )
-}
+})
 
-function PortfolioCard({
+const PortfolioCard = memo(function PortfolioCard({
   item,
   index,
   onOpen,
@@ -242,28 +238,19 @@ function PortfolioCard({
   index: number
   onOpen: (index: number) => void
 }) {
-  const ref = useRef<HTMLButtonElement | null>(null)
-  const { scrollYProgress } = useScroll({ target: ref, offset: ["start end", "end start"] })
-  const beforeY = useTransform(scrollYProgress, [0, 1], ["-5%", "6%"])
-  const afterY = useTransform(scrollYProgress, [0, 1], ["-8%", "9%"])
-
   return (
     <motion.button
-      ref={ref}
       type="button"
       variants={cardVariants}
       onClick={() => onOpen(index)}
       className="group relative aspect-[16/11] overflow-hidden rounded-2xl border border-white/10 text-left transition-all duration-500 hover:-translate-y-2 hover:shadow-xl hover:shadow-black/50"
     >
-      <motion.div style={{ y: beforeY }} className="absolute inset-0">
+      <div className="absolute inset-0">
         <Image src={item.beforeImage} alt={`До: ${item.title}`} fill sizes="(max-width: 768px) 100vw, 50vw" className="object-cover" />
-      </motion.div>
-      <motion.div
-        style={{ y: afterY }}
-        className="absolute inset-0 [clip-path:inset(0_56%_0_0)] transition-[clip-path] duration-500 group-hover:[clip-path:inset(0_0%_0_0)]"
-      >
+      </div>
+      <div className="absolute inset-0 [clip-path:inset(0_56%_0_0)] transition-[clip-path] duration-500 group-hover:[clip-path:inset(0_0%_0_0)]">
         <Image src={item.afterImage} alt={`После: ${item.title}`} fill sizes="(max-width: 768px) 100vw, 50vw" className="object-cover transition-transform duration-500 group-hover:scale-105" />
-      </motion.div>
+      </div>
       <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/45 to-transparent" />
       <div className="absolute left-4 top-4 z-10 rounded-full border border-white/20 bg-black/40 px-3 py-1 text-xs uppercase tracking-[0.2em] text-zinc-100">До</div>
       <div className="absolute right-4 top-4 z-10 rounded-full border border-amber-300/35 bg-amber-400/15 px-3 py-1 text-xs uppercase tracking-[0.2em] text-amber-100">После</div>
@@ -277,26 +264,9 @@ function PortfolioCard({
       </div>
     </motion.button>
   )
-}
+})
 
-export default function Home() {
-  const { scrollY } = useScroll()
-  const lightOneY = useTransform(scrollY, [0, 1600], [0, 220])
-  const lightTwoY = useTransform(scrollY, [0, 1600], [0, -180])
-  const lightOne = useSpring(lightOneY, { stiffness: 90, damping: 25, mass: 0.25 })
-  const lightTwo = useSpring(lightTwoY, { stiffness: 90, damping: 25, mass: 0.25 })
-
-  const [activePortfolioIndex, setActivePortfolioIndex] = useState<number | null>(null)
-  const activePortfolioItem = useMemo(
-    () => (activePortfolioIndex === null ? null : portfolioItems[activePortfolioIndex]),
-    [activePortfolioIndex],
-  )
-  const [activeServiceIndex, setActiveServiceIndex] = useState<number | null>(null)
-  const activeServiceItem = useMemo(
-    () => (activeServiceIndex === null ? null : services[activeServiceIndex]),
-    [activeServiceIndex],
-  )
-
+const ContactBookingForm = memo(function ContactBookingForm() {
   const [name, setName] = useState("")
   const [phone, setPhone] = useState("")
   const [message, setMessage] = useState("")
@@ -305,14 +275,6 @@ export default function Home() {
     type: "idle",
     text: "",
   })
-
-  const movePortfolio = (direction: 1 | -1) => {
-    setActivePortfolioIndex((prev) => {
-      if (prev === null) return 0
-      if (direction === 1) return (prev + 1) % portfolioItems.length
-      return (prev - 1 + portfolioItems.length) % portfolioItems.length
-    })
-  }
 
   const submitForm = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
@@ -342,9 +304,85 @@ export default function Home() {
   }
 
   return (
+    <motion.form onSubmit={submitForm} initial={{ opacity: 0, x: 20 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ duration: 0.7, ease: "easeOut" }} className="glass-panel rounded-2xl border border-white/15 p-7">
+      <div className="space-y-4">
+        <Input required value={name} onChange={(e) => setName(e.target.value)} placeholder="Ваше имя" className="h-12 rounded-xl border-white/20 bg-white/5 text-white placeholder:text-zinc-500 focus-visible:border-amber-300/70 focus-visible:ring-4 focus-visible:ring-amber-400/25" />
+        <Input required value={phone} onChange={(e) => setPhone(e.target.value)} placeholder="+374 00 000 000" className="h-12 rounded-xl border-white/20 bg-white/5 text-white placeholder:text-zinc-500 focus-visible:border-amber-300/70 focus-visible:ring-4 focus-visible:ring-amber-400/25" />
+        <Textarea required value={message} onChange={(e) => setMessage(e.target.value)} placeholder="Ваш комментарий" className="min-h-36 rounded-xl border-white/20 bg-white/5 text-white placeholder:text-zinc-500 focus-visible:border-amber-300/70 focus-visible:ring-4 focus-visible:ring-amber-400/25" />
+      </div>
+      {feedback.type !== "idle" ? (
+        <p className={`mt-4 text-sm ${feedback.type === "success" ? "text-emerald-400" : "text-red-400"}`}>{feedback.text}</p>
+      ) : null}
+      <Button type="submit" size="lg" disabled={isSubmitting} className="mt-6 h-12 w-full rounded-xl bg-gradient-to-r from-amber-300 via-amber-400 to-orange-400 text-base font-semibold text-black shadow-lg shadow-amber-500/35 hover:scale-[1.02] hover:shadow-xl hover:shadow-amber-500/40">
+        <span className="inline-flex items-center gap-2">{isSubmitting ? "Отправка..." : "Отправить"} <SendHorizonal className="size-4" /></span>
+      </Button>
+    </motion.form>
+  )
+})
+
+function LazyMapEmbed() {
+  const mapContainerRef = useRef<HTMLDivElement | null>(null)
+  const [shouldLoad, setShouldLoad] = useState(false)
+
+  useEffect(() => {
+    if (!mapContainerRef.current || shouldLoad) return
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (!entry.isIntersecting) return
+        setShouldLoad(true)
+        observer.disconnect()
+      },
+      { rootMargin: "260px" },
+    )
+
+    observer.observe(mapContainerRef.current)
+    return () => observer.disconnect()
+  }, [shouldLoad])
+
+  return (
+    <div ref={mapContainerRef} className="h-[340px] w-full">
+      {shouldLoad ? (
+        <iframe title="Detailing studio location" src="https://www.google.com/maps?q=Yerevan%209%20May%20Street%2026&output=embed" className="h-full w-full border-0" loading="lazy" referrerPolicy="no-referrer-when-downgrade" />
+      ) : (
+        <div className="flex h-full items-center justify-center bg-white/5 text-sm text-zinc-400">Загрузка карты...</div>
+      )}
+    </div>
+  )
+}
+
+export default function Home() {
+  const { scrollY } = useScroll()
+  const lightOneY = useTransform(scrollY, [0, 1600], [0, 220])
+  const lightTwoY = useTransform(scrollY, [0, 1600], [0, -180])
+  const lightOne = useSpring(lightOneY, { stiffness: 90, damping: 25, mass: 0.25 })
+  const lightTwo = useSpring(lightTwoY, { stiffness: 90, damping: 25, mass: 0.25 })
+
+  const [activePortfolioIndex, setActivePortfolioIndex] = useState<number | null>(null)
+  const activePortfolioItem = useMemo(
+    () => (activePortfolioIndex === null ? null : portfolioItems[activePortfolioIndex]),
+    [activePortfolioIndex],
+  )
+  const [activeServiceIndex, setActiveServiceIndex] = useState<number | null>(null)
+  const activeServiceItem = useMemo(
+    () => (activeServiceIndex === null ? null : services[activeServiceIndex]),
+    [activeServiceIndex],
+  )
+
+  const prefersReducedMotion = useReducedMotion()
+
+  const movePortfolio = useCallback((direction: 1 | -1) => {
+    setActivePortfolioIndex((prev) => {
+      if (prev === null) return 0
+      if (direction === 1) return (prev + 1) % portfolioItems.length
+      return (prev - 1 + portfolioItems.length) % portfolioItems.length
+    })
+  }, [])
+
+  return (
     <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.7, ease: "easeOut" }} className="relative overflow-x-clip premium-bg">
-      <motion.div aria-hidden style={{ y: lightOne }} className="pointer-events-none absolute -left-24 top-28 z-0 h-72 w-72 rounded-full bg-amber-500/20 blur-3xl" />
-      <motion.div aria-hidden style={{ y: lightTwo }} className="pointer-events-none absolute -right-28 top-[38rem] z-0 h-80 w-80 rounded-full bg-orange-400/15 blur-3xl" />
+      <motion.div aria-hidden style={prefersReducedMotion ? undefined : { y: lightOne }} className="pointer-events-none absolute -left-24 top-28 z-0 h-72 w-72 rounded-full bg-amber-500/20 blur-3xl" />
+      <motion.div aria-hidden style={prefersReducedMotion ? undefined : { y: lightTwo }} className="pointer-events-none absolute -right-28 top-[38rem] z-0 h-80 w-80 rounded-full bg-orange-400/15 blur-3xl" />
       <PremiumHero className="pt-16" />
 
       <motion.section id="services" className="section-space scroll-mt-24" initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, amount: 0.2 }} transition={{ duration: 0.7, ease: "easeOut" }}>
@@ -421,19 +459,7 @@ export default function Home() {
               </div>
             </motion.div>
 
-            <motion.form onSubmit={submitForm} initial={{ opacity: 0, x: 20 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ duration: 0.7, ease: "easeOut" }} className="glass-panel rounded-2xl border border-white/15 p-7">
-              <div className="space-y-4">
-                <Input required value={name} onChange={(e) => setName(e.target.value)} placeholder="Ваше имя" className="h-12 rounded-xl border-white/20 bg-white/5 text-white placeholder:text-zinc-500 focus-visible:border-amber-300/70 focus-visible:ring-4 focus-visible:ring-amber-400/25" />
-                <Input required value={phone} onChange={(e) => setPhone(e.target.value)} placeholder="+374 00 000 000" className="h-12 rounded-xl border-white/20 bg-white/5 text-white placeholder:text-zinc-500 focus-visible:border-amber-300/70 focus-visible:ring-4 focus-visible:ring-amber-400/25" />
-                <Textarea required value={message} onChange={(e) => setMessage(e.target.value)} placeholder="Ваш комментарий" className="min-h-36 rounded-xl border-white/20 bg-white/5 text-white placeholder:text-zinc-500 focus-visible:border-amber-300/70 focus-visible:ring-4 focus-visible:ring-amber-400/25" />
-              </div>
-              {feedback.type !== "idle" ? (
-                <p className={`mt-4 text-sm ${feedback.type === "success" ? "text-emerald-400" : "text-red-400"}`}>{feedback.text}</p>
-              ) : null}
-              <Button type="submit" size="lg" disabled={isSubmitting} className="mt-6 h-12 w-full rounded-xl bg-gradient-to-r from-amber-300 via-amber-400 to-orange-400 text-base font-semibold text-black shadow-lg shadow-amber-500/35 hover:scale-[1.02] hover:shadow-xl hover:shadow-amber-500/40">
-                <span className="inline-flex items-center gap-2">{isSubmitting ? "Отправка..." : "Отправить"} <SendHorizonal className="size-4" /></span>
-              </Button>
-            </motion.form>
+            <ContactBookingForm />
           </div>
 
           <motion.div initial={{ opacity: 0, y: 18 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.7, ease: "easeOut" }} className="glass-card mt-6 overflow-hidden rounded-2xl border border-white/15">
@@ -441,7 +467,7 @@ export default function Home() {
               <p className="text-sm uppercase tracking-[0.2em] text-zinc-400">Карта проезда</p>
               <MapPin className="size-4 text-amber-300" />
             </div>
-            <iframe title="Detailing studio location" src="https://www.google.com/maps?q=Yerevan%209%20May%20Street%2026&output=embed" className="h-[340px] w-full border-0" loading="lazy" referrerPolicy="no-referrer-when-downgrade" />
+            <LazyMapEmbed />
           </motion.div>
         </div>
       </motion.section>
