@@ -170,12 +170,7 @@ export function SiteHeader() {
                   {link.label}
                 </Link>
               ))}
-              <Link
-                href="https://t.me/haydetail_arm"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-amber-400 transition hover:text-amber-300"
-              >
+              <Link href="/film-ai" className="text-amber-400 transition hover:text-amber-300">
                 {t.bot}
               </Link>
             </nav>
@@ -248,9 +243,7 @@ export function SiteHeader() {
                 </Link>
               ))}
               <Link
-                href="https://t.me/haydetail_arm"
-                target="_blank"
-                rel="noopener noreferrer"
+                href="/film-ai"
                 onClick={() => setIsOpen(false)}
                 className="rounded-md px-3 py-2 text-amber-400 transition hover:bg-white/10"
               >

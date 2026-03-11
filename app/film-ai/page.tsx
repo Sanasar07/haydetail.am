@@ -11,6 +11,7 @@ const filmStyles = [
   { id: "matte", label: "Матовая", className: "saturate-70 brightness-95" },
   { id: "dark", label: "Сатин / Dark", className: "brightness-75 contrast-125" },
 ] as const
+const botUrl = process.env.NEXT_PUBLIC_TELEGRAM_BOT_URL ?? "https://t.me/haydetail_ai"
 
 export default function FilmAiPage() {
   const [selectedFilm, setSelectedFilm] = useState<(typeof filmStyles)[number]["id"]>("gloss")
@@ -91,7 +92,7 @@ export default function FilmAiPage() {
               </div>
 
               <Button asChild className="mt-6 w-full bg-amber-500 text-black hover:bg-amber-400">
-                <a href="https://t.me/haydetail_ai" target="_blank" rel="noopener noreferrer">
+                <a href={botUrl} target="_blank" rel="noopener noreferrer">
                   Перейти в Telegram AI
                 </a>
               </Button>

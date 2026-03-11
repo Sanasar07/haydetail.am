@@ -63,7 +63,7 @@ export function SiteFooter() {
             <Link href="https://wa.me/37455562626" className="transition hover:text-amber-300">
               WhatsApp
             </Link>
-            <Link href="https://t.me/haydetail_arm" className="transition hover:text-amber-300">
+            <Link href="/film-ai" className="transition hover:text-amber-300">
               Telegram
             </Link>
           </div>

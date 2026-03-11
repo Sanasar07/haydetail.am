@@ -244,9 +244,7 @@ export function BookingSection() {
               WhatsApp
             </a>
             <a
-              href="https://t.me/haydetail_arm"
-              target="_blank"
-              rel="noopener noreferrer"
+              href="/film-ai"
               className="glass-card flex items-center justify-center gap-2 rounded-xl py-3 text-sm text-zinc-200 transition hover:border-amber-400/50"
             >
               <Send className="size-4 text-amber-400" />
