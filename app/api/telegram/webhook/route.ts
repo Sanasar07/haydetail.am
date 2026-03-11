@@ -137,9 +137,13 @@ async function applyFilm(buffer: Buffer, filmId: FilmId) {
 
 async function sendProcessedPhoto(chatId: number, caption: string, imageBuffer: Buffer) {
   const form = new FormData()
+  const imageArrayBuffer = imageBuffer.buffer.slice(
+    imageBuffer.byteOffset,
+    imageBuffer.byteOffset + imageBuffer.byteLength
+  )
   form.append("chat_id", String(chatId))
   form.append("caption", caption)
-  form.append("photo", new Blob([imageBuffer], { type: "image/jpeg" }), "film-preview.jpg")
+  form.append("photo", new Blob([imageArrayBuffer], { type: "image/jpeg" }), "film-preview.jpg")
   await telegramForm("sendPhoto", form)
 }
 
