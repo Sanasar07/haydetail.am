@@ -2,7 +2,7 @@
 
 import Image from "next/image"
 import Link from "next/link"
-import { useEffect, useMemo, useState } from "react"
+import { useCallback, useEffect, useMemo, useState } from "react"
 import { Menu, X } from "lucide-react"
 
 import { useLanguage, type Lang } from "@/components/language-provider"
@@ -52,6 +52,14 @@ export function SiteHeader() {
   const [isOpen, setIsOpen] = useState(false)
   const [activeHref, setActiveHref] = useState("#services")
   const { lang, setLang } = useLanguage()
+  const scrollToHash = useCallback((href: string) => {
+    if (!href.startsWith("#")) return false
+    const target = document.getElementById(href.slice(1))
+    if (!target) return false
+    target.scrollIntoView({ behavior: "smooth", block: "start" })
+    history.replaceState(null, "", href)
+    return true
+  }, [])
 
   useEffect(() => {
     const onScroll = () => setIsScrolled(window.scrollY > 12)
@@ -147,7 +155,12 @@ export function SiteHeader() {
                 <Link
                   key={link.href}
                   href={link.href}
-                  onClick={() => setActiveHref(link.href)}
+                  onClick={(event) => {
+                    if (scrollToHash(link.href)) {
+                      event.preventDefault()
+                      setActiveHref(link.href)
+                    }
+                  }}
                   className={`relative pb-1 tracking-wide transition-colors duration-300 after:absolute after:bottom-0 after:left-0 after:h-px after:w-full after:origin-left after:bg-amber-400 after:transition-transform after:duration-300 ${
                     activeHref === link.href
                       ? "text-white after:scale-x-100"
@@ -183,7 +196,17 @@ export function SiteHeader() {
             </div>
 
             <Button asChild className="rounded-xl bg-amber-500 text-black shadow-lg shadow-amber-500/20 hover:bg-amber-400">
-              <Link href="#contacts">{t.cta}</Link>
+              <Link
+                href="#contacts"
+                onClick={(event) => {
+                  if (scrollToHash("#contacts")) {
+                    event.preventDefault()
+                    setActiveHref("#contacts")
+                  }
+                }}
+              >
+                {t.cta}
+              </Link>
             </Button>
           </div>
 
@@ -210,7 +233,9 @@ export function SiteHeader() {
                   key={link.href}
                   href={link.href}
                   onClick={() => {
-                    setActiveHref(link.href)
+                    if (scrollToHash(link.href)) {
+                      setActiveHref(link.href)
+                    }
                     setIsOpen(false)
                   }}
                   className={`rounded-md px-3 py-2 transition ${
@@ -245,8 +270,19 @@ export function SiteHeader() {
                   </button>
                 ))}
               </div>
-              <Button asChild onClick={() => setIsOpen(false)} className="mt-2 rounded-xl bg-amber-500 text-black shadow-lg shadow-amber-500/20 hover:bg-amber-400">
-                <Link href="#contacts">{t.cta}</Link>
+              <Button asChild className="mt-2 rounded-xl bg-amber-500 text-black shadow-lg shadow-amber-500/20 hover:bg-amber-400">
+                <Link
+                  href="#contacts"
+                  onClick={(event) => {
+                    if (scrollToHash("#contacts")) {
+                      event.preventDefault()
+                      setActiveHref("#contacts")
+                    }
+                    setIsOpen(false)
+                  }}
+                >
+                  {t.cta}
+                </Link>
               </Button>
             </nav>
           </div>

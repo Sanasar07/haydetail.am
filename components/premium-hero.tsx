@@ -42,6 +42,17 @@ export function PremiumHero({
   const backgroundScale = useTransform(scrollYProgress, [0, 1], [1, 1.08])
   const textY = useTransform(scrollYProgress, [0, 1], [0, 36])
   const headingId = `${id}-title`
+  const handleCtaClick = (event: React.MouseEvent<HTMLAnchorElement>) => {
+    if (!ctaHref?.startsWith("#")) return
+    event.preventDefault()
+    const target = document.getElementById(ctaHref.slice(1))
+    if (!target) return
+    target.scrollIntoView({
+      behavior: prefersReducedMotion ? "auto" : "smooth",
+      block: "start",
+    })
+    history.replaceState(null, "", ctaHref)
+  }
 
   return (
     <section
@@ -121,7 +132,9 @@ export function PremiumHero({
               size="lg"
               className="h-12 rounded-xl bg-amber-400 px-7 text-base font-semibold text-black shadow-lg shadow-amber-500/35 transition-colors hover:bg-amber-300"
             >
-              <Link href={ctaHref}>{ctaLabel}</Link>
+              <Link href={ctaHref} onClick={handleCtaClick}>
+                {ctaLabel}
+              </Link>
             </Button>
           </motion.div>
         </motion.div>
@@ -129,4 +142,3 @@ export function PremiumHero({
     </section>
   )
 }
-

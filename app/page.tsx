@@ -1,7 +1,6 @@
-"use client"
+﻿"use client"
 
 import Image from "next/image"
-import Link from "next/link"
 import { memo, useCallback, useEffect, useMemo, useRef, useState, type FormEvent } from "react"
 import {
   ArrowRight,
@@ -378,6 +377,15 @@ export default function Home() {
       return (prev - 1 + portfolioItems.length) % portfolioItems.length
     })
   }, [])
+  const scrollToContacts = useCallback(() => {
+    const target = document.getElementById("contacts")
+    if (!target) return
+    target.scrollIntoView({
+      behavior: prefersReducedMotion ? "auto" : "smooth",
+      block: "start",
+    })
+    history.replaceState(null, "", "#contacts")
+  }, [prefersReducedMotion])
 
   return (
     <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.7, ease: "easeOut" }} className="relative overflow-x-clip premium-bg">
@@ -429,8 +437,13 @@ export default function Home() {
             <p className="section-kicker">BOOKING</p>
             <h2 className="mt-4 text-4xl font-bold tracking-wide text-white md:text-5xl">Готовы обновить ваш автомобиль?</h2>
             <p className="mx-auto mt-5 max-w-2xl text-lg tracking-wide text-zinc-300">Запишитесь сейчас и получите персональную консультацию по вашему проекту.</p>
-            <Button asChild size="lg" className="mt-9 h-12 rounded-xl bg-gradient-to-r from-amber-300 via-amber-400 to-orange-400 px-8 text-base font-semibold text-black shadow-lg shadow-amber-500/35 hover:scale-105">
-              <Link href="#contacts">Оставить заявку</Link>
+            <Button
+              type="button"
+              size="lg"
+              onClick={scrollToContacts}
+              className="mt-9 h-12 rounded-xl bg-gradient-to-r from-amber-300 via-amber-400 to-orange-400 px-8 text-base font-semibold text-black shadow-lg shadow-amber-500/35 hover:scale-105"
+            >
+              Оставить заявку
             </Button>
           </div>
         </div>
