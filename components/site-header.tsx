@@ -139,13 +139,13 @@ export function SiteHeader() {
       <div className="site-container">
         <div className="flex h-20 items-center justify-between">
           <Link href="/" className="inline-flex items-center gap-3 text-white">
-            <Image
-              src="/uploads/logo.jpg"
-              alt="Haydetail"
-              width={36}
-              height={36}
-              className="rounded-md object-cover"
-            />
+              <Image
+                src="/uploads/logo.svg"
+                alt="Haydetail"
+                width={40}
+                height={40}
+                className="rounded-md"
+              />
             <span className="text-xl font-semibold tracking-[0.04em]">Haydetail</span>
           </Link>
 
