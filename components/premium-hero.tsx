@@ -97,7 +97,7 @@ export function PremiumHero({
             initial={{ opacity: 0, y: 16, scale: 0.98 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             transition={{ duration: 0.9, delay: 0.04, ease: APPLE_EASE }}
-            className="flex justify-center md:justify-start"
+            className="flex justify-center md:justify-start isolate"
           >
             <Image
               src="/uploads/logo.jpg"
@@ -105,7 +105,7 @@ export function PremiumHero({
               width={360}
               height={360}
               priority
-              className="h-44 w-auto rounded-2xl drop-shadow-[0_28px_60px_rgba(0,0,0,0.55)] sm:h-52 lg:h-60"
+              className="h-44 w-auto mix-blend-screen drop-shadow-[0_28px_60px_rgba(0,0,0,0.55)] sm:h-52 lg:h-60"
             />
           </motion.div>
 
