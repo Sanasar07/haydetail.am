@@ -100,12 +100,12 @@ export function PremiumHero({
             className="flex justify-center md:justify-start"
           >
             <Image
-              src="/uploads/logo.svg"
+              src="/uploads/logo.jpg"
               alt="Haydetail"
               width={360}
               height={360}
               priority
-              className="h-44 w-auto drop-shadow-[0_28px_60px_rgba(0,0,0,0.55)] sm:h-52 lg:h-60"
+              className="h-44 w-auto rounded-2xl drop-shadow-[0_28px_60px_rgba(0,0,0,0.55)] sm:h-52 lg:h-60"
             />
           </motion.div>
 
