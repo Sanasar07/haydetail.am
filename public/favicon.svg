@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-label="Haydetail">
+  <defs>
+    <linearGradient id="gold" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#f7c954"/>
+      <stop offset="100%" stop-color="#d99a2b"/>
+    </linearGradient>
+  </defs>
+  <rect width="128" height="128" rx="28" fill="#0a0a0a"/>
+  <path d="M36 96V32h16v24h24V32h16v64h-16V72H52v24H36z" fill="url(#gold)"/>
+</svg>

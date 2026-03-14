@@ -1,9 +1,9 @@
-﻿"use client"
+"use client"
 
 import Image from "next/image"
 import Link from "next/link"
 import { useRef } from "react"
-import { motion, useReducedMotion, useScroll, useTransform } from "framer-motion"
+import { motion, useReducedMotion, useScroll, useSpring, useTransform } from "framer-motion"
 
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
@@ -45,7 +45,10 @@ export function PremiumHero({
   const backgroundY = useTransform(scrollYProgress, [0, 1], [0, -72])
   const backgroundScale = useTransform(scrollYProgress, [0, 1], [1, 1.08])
   const textY = useTransform(scrollYProgress, [0, 1], [0, 36])
+  const imageY = useTransform(scrollYProgress, [0, 1], [0, 52])
+  const imageParallax = useSpring(imageY, { stiffness: 120, damping: 28, mass: 0.35 })
   const headingId = `${id}-title`
+
   const handleCtaClick = (event: React.MouseEvent<HTMLAnchorElement>) => {
     if (!ctaHref?.startsWith("#")) return
     event.preventDefault()
@@ -77,14 +80,7 @@ export function PremiumHero({
         }
         className="absolute inset-0 z-0"
       >
-        <Image
-          src={backgroundSrc}
-          alt=""
-          fill
-          priority
-          sizes="100vw"
-          className="object-cover"
-        />
+        <Image src={backgroundSrc} alt="" fill priority sizes="100vw" className="object-cover" />
         <div className="absolute inset-0 bg-[radial-gradient(140%_95%_at_50%_2%,rgba(255,255,255,0.24),rgba(255,255,255,0)_45%)]" />
         <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/80 to-[#050505]" />
       </motion.div>
@@ -106,12 +102,12 @@ export function PremiumHero({
                 className="flex justify-center md:justify-start"
               >
                 <Image
-                  src="/uploads/logo.svg"
+                  src="/uploads/logo-removebg-preview.png"
                   alt="Haydetail"
                   width={360}
                   height={360}
                   priority
-                  className="h-36 w-auto drop-shadow-[0_28px_60px_rgba(0,0,0,0.55)] sm:h-44 lg:h-52"
+                  className="h-36 w-auto object-contain drop-shadow-[0_28px_60px_rgba(0,0,0,0.55)] sm:h-44 lg:h-52"
                 />
               </motion.div>
 
@@ -165,6 +161,7 @@ export function PremiumHero({
               initial={{ opacity: 0, y: 22 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.9, delay: 0.15, ease: APPLE_EASE }}
+              style={prefersReducedMotion ? undefined : { y: imageParallax }}
               className="relative"
             >
               <div className="relative aspect-[4/5] overflow-hidden rounded-3xl border border-white/10 bg-black/40 shadow-[0_30px_80px_rgba(0,0,0,0.45)]">

@@ -57,6 +57,9 @@
   --popover-foreground: #ffffff;
   --primary: #f59e0b;
   --primary-foreground: #0a0a0a;
+  --brand-gold: #f59e0b;
+  --brand-gold-soft: #f7c954;
+  --brand-ink: #0a0a0a;
   --secondary: #171717;
   --secondary-foreground: #ffffff;
   --muted: #171717;
@@ -91,6 +94,9 @@
   --popover-foreground: #ffffff;
   --primary: #f59e0b;
   --primary-foreground: #0a0a0a;
+  --brand-gold: #f59e0b;
+  --brand-gold-soft: #f7c954;
+  --brand-ink: #0a0a0a;
   --secondary: #171717;
   --secondary-foreground: #ffffff;
   --muted: #171717;

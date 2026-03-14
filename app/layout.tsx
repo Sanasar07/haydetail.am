@@ -19,19 +19,47 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 })
 
+const SITE_TITLE = "Детейлинг студия | Полировка, Керамика, Химчистка"
+const SITE_DESCRIPTION = "Премиальный уход за автомобилем"
+
 export const metadata: Metadata = {
-  title: "Детейлинг студия | Полировка, Керамика, Химчистка",
-  description: "Премиальный уход за автомобилем",
+  metadataBase: new URL("https://haydetail-am.vercel.app"),
+  title: SITE_TITLE,
+  description: SITE_DESCRIPTION,
   openGraph: {
-    title: "Детейлинг студия | Полировка, Керамика, Химчистка",
-    description: "Премиальный уход за автомобилем",
+    title: SITE_TITLE,
+    description: SITE_DESCRIPTION,
     type: "website",
     locale: "ru_RU",
     siteName: "Haydetail",
+    url: "/",
+    images: [
+      {
+        url: "/og-image.svg",
+        width: 1200,
+        height: 630,
+        alt: "Haydetail",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: SITE_TITLE,
+    description: SITE_DESCRIPTION,
+    images: ["/og-image.svg"],
+  },
+  robots: {
+    index: true,
+    follow: true,
   },
   icons: {
-    icon: "/favicon.ico",
+    icon: [
+      { url: "/favicon.svg", type: "image/svg+xml" },
+      { url: "/uploads/logo-removebg-preview.png", type: "image/png" },
+    ],
+    apple: "/uploads/logo-removebg-preview.png",
   },
+  themeColor: "#f59e0b",
 }
 
 export default function RootLayout({

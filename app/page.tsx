@@ -228,6 +228,60 @@ const WhyCard = memo(function WhyCard({ item }: { item: WhyItem }) {
   )
 })
 
+const BeforeAfterSlider = memo(function BeforeAfterSlider({
+  beforeImage,
+  afterImage,
+  title,
+  aspectClassName = "aspect-[16/11]",
+  sizes = "(max-width: 768px) 100vw, 50vw",
+}: {
+  beforeImage: string
+  afterImage: string
+  title: string
+  aspectClassName?: string
+  sizes?: string
+}) {
+  const [value, setValue] = useState(52)
+
+  return (
+    <div
+      className={`relative overflow-hidden rounded-2xl border border-white/10 bg-black/40 ${aspectClassName}`}
+      aria-label={`До и после: ${title}`}
+    >
+      <Image src={beforeImage} alt={`До: ${title}`} fill sizes={sizes} className="object-cover" />
+      <div className="absolute inset-0" style={{ clipPath: `inset(0 ${100 - value}% 0 0)` }}>
+        <Image src={afterImage} alt={`После: ${title}`} fill sizes={sizes} className="object-cover" />
+      </div>
+
+      <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/80 via-black/25 to-transparent" />
+      <div className="absolute left-4 top-4 z-10 rounded-full border border-white/20 bg-black/40 px-3 py-1 text-xs uppercase tracking-[0.2em] text-zinc-100">
+        До
+      </div>
+      <div className="absolute right-4 top-4 z-10 rounded-full border border-amber-300/35 bg-amber-400/15 px-3 py-1 text-xs uppercase tracking-[0.2em] text-amber-100">
+        После
+      </div>
+
+      <div className="pointer-events-none absolute inset-y-0 z-10" style={{ left: `${value}%` }}>
+        <div className="absolute -translate-x-1/2 top-0 h-full w-px bg-white/80 shadow-[0_0_12px_rgba(255,255,255,0.35)]" />
+        <div className="absolute -translate-x-1/2 top-1/2 flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full border border-white/50 bg-black/70 backdrop-blur">
+          <div className="h-4 w-px bg-white/70" />
+        </div>
+      </div>
+
+      <input
+        aria-label="Слайдер до/после"
+        type="range"
+        min={0}
+        max={100}
+        step={0.5}
+        value={value}
+        onChange={(event) => setValue(Number(event.target.value))}
+        className="absolute inset-0 h-full w-full cursor-ew-resize opacity-0"
+      />
+    </div>
+  )
+})
+
 const PortfolioCard = memo(function PortfolioCard({
   item,
   index,
@@ -238,30 +292,24 @@ const PortfolioCard = memo(function PortfolioCard({
   onOpen: (index: number) => void
 }) {
   return (
-    <motion.button
-      type="button"
+    <motion.div
       variants={cardVariants}
-      onClick={() => onOpen(index)}
-      className="group relative aspect-[16/11] overflow-hidden rounded-2xl border border-white/10 text-left transition-all duration-500 hover:-translate-y-2 hover:shadow-xl hover:shadow-black/50"
+      className="group relative overflow-hidden rounded-2xl border border-white/10 text-left transition-all duration-500 hover:-translate-y-2 hover:shadow-xl hover:shadow-black/50"
     >
-      <div className="absolute inset-0">
-        <Image src={item.beforeImage} alt={`До: ${item.title}`} fill sizes="(max-width: 768px) 100vw, 50vw" className="object-cover" />
-      </div>
-      <div className="absolute inset-0 [clip-path:inset(0_56%_0_0)] transition-[clip-path] duration-500 group-hover:[clip-path:inset(0_0%_0_0)]">
-        <Image src={item.afterImage} alt={`После: ${item.title}`} fill sizes="(max-width: 768px) 100vw, 50vw" className="object-cover transition-transform duration-500 group-hover:scale-105" />
-      </div>
-      <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/45 to-transparent" />
-      <div className="absolute left-4 top-4 z-10 rounded-full border border-white/20 bg-black/40 px-3 py-1 text-xs uppercase tracking-[0.2em] text-zinc-100">До</div>
-      <div className="absolute right-4 top-4 z-10 rounded-full border border-amber-300/35 bg-amber-400/15 px-3 py-1 text-xs uppercase tracking-[0.2em] text-amber-100">После</div>
+      <BeforeAfterSlider beforeImage={item.beforeImage} afterImage={item.afterImage} title={item.title} />
       <div className="absolute inset-x-0 bottom-0 z-10 p-6">
         <h3 className="text-xl font-semibold tracking-wide text-white">{item.title}</h3>
         <p className="mt-2 max-w-lg text-sm tracking-wide text-zinc-300">{item.description}</p>
-        <span className="mt-4 inline-flex items-center gap-2 text-sm font-medium text-amber-300">
+        <button
+          type="button"
+          onClick={() => onOpen(index)}
+          className="mt-4 inline-flex items-center gap-2 text-sm font-medium text-amber-300 transition hover:text-amber-200"
+        >
           Открыть работу
           <ArrowRight className="size-4" />
-        </span>
+        </button>
       </div>
-    </motion.button>
+    </motion.div>
   )
 })
 
@@ -520,13 +568,16 @@ export default function Home() {
           {activePortfolioItem ? (
             <div className="space-y-4">
               <div className="relative overflow-hidden rounded-2xl border border-white/10 bg-black/40">
-                <div className="relative aspect-[16/9]">
-                  <Image src={activePortfolioItem.afterImage} alt={activePortfolioItem.title} fill sizes="95vw" className="object-cover" />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent" />
-                  <div className="absolute inset-x-0 bottom-0 p-5">
-                    <h3 className="text-2xl font-semibold tracking-wide text-white">{activePortfolioItem.title}</h3>
-                    <p className="mt-2 max-w-2xl text-sm tracking-wide text-zinc-300">{activePortfolioItem.description}</p>
-                  </div>
+                <BeforeAfterSlider
+                  beforeImage={activePortfolioItem.beforeImage}
+                  afterImage={activePortfolioItem.afterImage}
+                  title={activePortfolioItem.title}
+                  aspectClassName="aspect-[16/9]"
+                  sizes="95vw"
+                />
+                <div className="absolute inset-x-0 bottom-0 p-5">
+                  <h3 className="text-2xl font-semibold tracking-wide text-white">{activePortfolioItem.title}</h3>
+                  <p className="mt-2 max-w-2xl text-sm tracking-wide text-zinc-300">{activePortfolioItem.description}</p>
                 </div>
               </div>
               <div className="flex justify-between gap-3">

@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" role="img" aria-label="Haydetail">
+  <defs>
+    <linearGradient id="gold" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#f7c954"/>
+      <stop offset="60%" stop-color="#d99a2b"/>
+      <stop offset="100%" stop-color="#f8d36b"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0.2" cy="0.1" r="0.8">
+      <stop offset="0%" stop-color="rgba(245,158,11,0.35)"/>
+      <stop offset="100%" stop-color="rgba(245,158,11,0)"/>
+    </radialGradient>
+  </defs>
+  <rect width="1200" height="630" fill="#0a0a0a"/>
+  <rect width="1200" height="630" fill="url(#glow)"/>
+  <text x="80" y="260" font-size="72" font-family="Arial Black, Arial, sans-serif" fill="#ffffff">HAYDETAIL</text>
+  <text x="80" y="330" font-size="36" font-family="Arial, sans-serif" fill="url(#gold)" letter-spacing="4">
+    PREMIUM DETAILING STUDIO
+  </text>
+  <text x="80" y="430" font-size="32" font-family="Arial, sans-serif" fill="#d4d4d4">
+    Премиальный уход за автомобилем
+  </text>
+</svg>
